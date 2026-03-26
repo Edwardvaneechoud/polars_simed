@@ -47,7 +47,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [x86_64, aarch64]
+        include:
+          - target: x86_64
+            args: --release --out dist --find-interpreter
+          - target: aarch64
+            args: --release --out dist --find-interpreter --zig
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -57,7 +61,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist --find-interpreter
+          args: ${{ matrix.args }}
           sccache: 'true'
           manylinux: auto
       - name: Upload wheels
