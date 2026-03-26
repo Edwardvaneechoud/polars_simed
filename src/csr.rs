@@ -6,21 +6,11 @@ use std::{
 };
 
 pub trait IndPtrStorage: PrimInt + Unsigned + Default + Send + Sync + AddAssign<Self> {
-    fn try_index(&self) -> Option<usize>;
-
     fn index(self) -> usize;
-
-    fn index_unchecked(self) -> usize;
-
-    fn from_usize(val: usize) -> Self;
 }
 
 pub trait IndexStorage: PrimInt + Unsigned + Default + Send + Sync {
-    fn try_index(&self) -> Option<usize>;
-
     fn index(self) -> usize;
-
-    fn index_unchecked(self) -> usize;
 
     fn from_usize(val: usize) -> Self;
 }
@@ -34,33 +24,13 @@ macro_rules! impl_indices_for_unsigned {
     ($($t:ty),*) => {
         $(
             impl IndPtrStorage for $t {
-                fn try_index(&self) -> Option<usize> {
-                    Some(*self as usize)
-                }
-
                 fn index(self) -> usize {
                     self as usize
-                }
-
-                fn index_unchecked(self) -> usize {
-                    self as usize
-                }
-
-                fn from_usize(val: usize) -> Self {
-                    val as Self
                 }
             }
 
             impl IndexStorage for $t {
-                fn try_index(&self) -> Option<usize> {
-                    Some(*self as usize)
-                }
-
                 fn index(self) -> usize {
-                    self as usize
-                }
-
-                fn index_unchecked(self) -> usize {
                     self as usize
                 }
 
